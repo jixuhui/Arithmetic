@@ -66,4 +66,15 @@ typedef enum _SORT_ORDER
  */
 + (NSArray * __nonnull)simpleSelectionWithNumberArray:(NSArray * __nonnull)array order:(SORT_ORDER)order;
 
+/**
+ *  堆排序
+ *  @desc 空间复杂度：O(1) 时间复杂度：O(n*n) 最差：O(n*n) 稳定性：不稳定 备注：n小时较好
+ *
+ *  @param array 输入的NSNumber对象数组
+ *  @param order 升序、降序
+ *
+ *  @return 排序后数组
+ */
++ (NSArray * __nonnull)heapWithNumberArray:(NSArray * __nonnull)array order:(SORT_ORDER)order;
+
 @end
