@@ -103,4 +103,17 @@ typedef enum _SORT_ORDER
  */
 + (NSArray * __nonnull)bubbleWithNumberArray:(NSArray * __nonnull)array order:(SORT_ORDER)order;
 
+/**
+ *  快速排序【有改进，加了标志位】
+ *  @space O(1)
+ *  @time O(n*n) best O(n) worst O(n*n)
+ *  @stability 稳定
+ *  @desc n小时较好
+ *
+ *  @param array 输入的NSNumber对象数组
+ *  @param order 升序、降序
+ *
+ *  @return 排序后数组
+ */
++ (NSArray * __nonnull)quickWithNumberArray:(NSArray * __nonnull)array order:(SORT_ORDER)order;
 @end

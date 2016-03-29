@@ -231,4 +231,73 @@
     return orderArray;
 }
 
++ (NSArray *)quickWithNumberArray:(NSArray *)array order:(SORT_ORDER)order
+{
+    NSMutableArray *orderArray = [NSMutableArray arrayWithArray:array];
+    
+    int (^group)(int, int) = ^(int low, int high){
+        
+        int outValue = low;
+        
+        while (low < high) {
+            
+            if (order == SORT_ORDER_ASCEND) {
+                while (low < high && [orderArray[low] intValue] < [orderArray[high] intValue]) {
+                    high --;
+                }
+                
+                if (low != high) {
+                    [orderArray exchangeObjectAtIndex:low withObjectAtIndex:high];
+                    outValue = high;
+                }
+                
+                while (low < high && orderArray[low] < orderArray[high]) {
+                    low ++;
+                }
+                
+                if (low != high) {
+                    [orderArray exchangeObjectAtIndex:low withObjectAtIndex:high];
+                    outValue = low;
+                }
+            }else {
+                while (low < high && [orderArray[low] intValue] > [orderArray[high] intValue]) {
+                    high --;
+                }
+                
+                if (low != high) {
+                    [orderArray exchangeObjectAtIndex:low withObjectAtIndex:high];
+                    outValue = high;
+                }
+                
+                while (low < high && orderArray[low] > orderArray[high]) {
+                    low ++;
+                }
+                
+                if (low != high) {
+                    [orderArray exchangeObjectAtIndex:low withObjectAtIndex:high];
+                    outValue = low;
+                }
+            }
+        }
+        
+        return outValue;
+    };
+    
+    
+    static void (^ recursiveMethod)(int, int) = NULL;
+    
+    recursiveMethod = ^(int low, int high) {
+        if (low < high) {
+            int middle = group(low,high);
+            
+            recursiveMethod(low,middle-1);
+            recursiveMethod(middle+1,high);
+        }
+    };
+    
+    recursiveMethod(0,(int)orderArray.count-1);
+    
+    return orderArray;
+}
+
 @end
