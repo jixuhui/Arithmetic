@@ -133,37 +133,40 @@
 {
     NSMutableArray *correctOrderArray = [NSMutableArray arrayWithArray:array];
     
-    void (^adjustHeap)(int) = ^(int index){
-        int originIndex = index;
-        int child = 2*index+1; //左孩子结点的位置。(i+1 为当前调整结点的右孩子结点的位置)
-        while (child < [correctOrderArray count]) {
+    void (^adjustHeap)(int,long) = ^(int index, long count){
+        int child = 2*index+1;
+        while (child < count) {
             
             switch (order) {
                 case SORT_ORDER_ASCEND:
                 {
-                    if(child+1 < [correctOrderArray count] && correctOrderArray[child] > correctOrderArray[child+1]) { // 如果右孩子大于左孩子(找到比当前待调整结点大的孩子结点)
+                    if(child+1 < count && correctOrderArray[child+1] >correctOrderArray[child]) {
                         ++child;
                     }
-                    if(correctOrderArray[index] > correctOrderArray[child]) {  // 如果较大的子结点大于父结点
-                        [correctOrderArray exchangeObjectAtIndex:index withObjectAtIndex:child]; // 那么把较大的子结点往上移动，替换它的父结点
-                        index = child;       // 重新设置index ,即待调整的下一个结点的位置
+                    if(correctOrderArray[child] > correctOrderArray[index]) {
+                        
+                        [correctOrderArray exchangeObjectAtIndex:index withObjectAtIndex:child];
+                        
+                        index = child;
                         child = 2*index+1;
-                    }  else {            // 如果当前待调整结点大于它的左右孩子，则不需要调整，直接退出
-                        break;
+                    }  else {
+                        return;
                     }
                 }
                     break;
                 case SORT_ORDER_DESCEND:
                 {
-                    if(child+1 < [correctOrderArray count] && correctOrderArray[child] < correctOrderArray[child+1]) { // 如果右孩子大于左孩子(找到比当前待调整结点大的孩子结点)
+                    if(child+1 < count && correctOrderArray[child+1] < correctOrderArray[child]) {
                         ++child;
                     }
-                    if(correctOrderArray[index] < correctOrderArray[child]) {  // 如果较大的子结点大于父结点
-                        [correctOrderArray exchangeObjectAtIndex:index withObjectAtIndex:child]; // 那么把较大的子结点往上移动，替换它的父结点
-                        index = child;       // 重新设置index ,即待调整的下一个结点的位置
+                    if(correctOrderArray[child] < correctOrderArray[index]) {
+                        
+                        [correctOrderArray exchangeObjectAtIndex:index withObjectAtIndex:child];
+                        
+                        index = child;
                         child = 2*index+1;
-                    }  else {            // 如果当前待调整结点大于它的左右孩子，则不需要调整，直接退出
-                        break;
+                    }  else {
+                        return;
                     }
                 }
                     break;
@@ -171,21 +174,18 @@
                 default:
                     break;
             }
-            
-            [correctOrderArray exchangeObjectAtIndex:originIndex withObjectAtIndex:index];// 当前待调整的结点放到比其大的孩子结点位置上
         }
     };
     
-    //不用建立堆啊，待议
-//    void (^creatHeap)() = ^(){
-//        //最后一个有子节点的根节点
-//        for (int i = (int)([correctOrderArray count] -1) / 2 ; i >= 0; --i)
-//        {
-//            adjustHeap(i);
-//        }
-//    };
-//    
-//    creatHeap();
+    void (^creatHeap)() = ^(){
+        //最后一个有子节点的根节点
+        for (int i = (int)([correctOrderArray count] -1)/2 ; i >= 0; --i)
+        {
+            adjustHeap(i,[correctOrderArray count]);
+        }
+    };
+    
+    creatHeap();
     
     //从最后一个元素开始对序列进行调整
     for (long i = [correctOrderArray count] - 1; i > 0; --i)
@@ -193,7 +193,7 @@
         //交换堆顶元素H[0]和堆中最后一个元素
         [correctOrderArray exchangeObjectAtIndex:0 withObjectAtIndex:i];
         //每次交换堆顶元素和堆中最后一个元素之后，都要对堆进行调整
-        adjustHeap(0);
+        adjustHeap(0,i);
     }
     
     return correctOrderArray;
