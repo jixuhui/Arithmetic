@@ -28,12 +28,12 @@
 
 + (NSArray *)insertionWithNumberArray:(NSArray *)array order:(SORT_ORDER)order
 {
-    NSMutableArray *correctOrderArray = [NSMutableArray arrayWithArray:array];
+    NSMutableArray *orderArray = [NSMutableArray arrayWithArray:array];
     
     int (^getLocation)(NSNumber *) = ^(NSNumber *aNumber) {
         int i = 0;
-        for (; i<[correctOrderArray count]; i++) {
-            NSNumber *number = [correctOrderArray objectAtIndex:i];
+        for (; i<[orderArray count]; i++) {
+            NSNumber *number = [orderArray objectAtIndex:i];
             
             switch (order) {
                 case SORT_ORDER_ASCEND:
@@ -62,14 +62,14 @@
     for (NSNumber *oneNumber in array) {
         int location = getLocation(oneNumber);
         
-        if (location==[correctOrderArray count]) {
-            [correctOrderArray addObject:oneNumber];
+        if (location==[orderArray count]) {
+            [orderArray addObject:oneNumber];
         }else {
-            [correctOrderArray insertObject:oneNumber atIndex:location];
+            [orderArray insertObject:oneNumber atIndex:location];
         }
     }
     
-    return correctOrderArray;
+    return orderArray;
 }
 
 + (NSArray *)shellWithNumberArray:(NSArray *)array increaseCount:(NSArray *)countArray order:(SORT_ORDER)order
@@ -81,7 +81,7 @@
 
 + (NSArray *)simpleSelectionWithNumberArray:(NSArray *)array order:(SORT_ORDER)order
 {
-    NSMutableArray *correctOrderArray = [NSMutableArray arrayWithArray:array];
+    NSMutableArray *orderArray = [NSMutableArray arrayWithArray:array];
     
     int (^ getMostIndex)(NSArray *) = ^(NSArray *leftArray){
         
@@ -117,21 +117,21 @@
         return mostIndex;
     };
     
-    NSUInteger correctCount = [correctOrderArray count];
+    NSUInteger correctCount = [orderArray count];
     for (int i=0; i<correctCount; i++) {
-        NSArray *leftArray = [correctOrderArray subarrayWithRange:NSMakeRange(i, [array count]-i)];
+        NSArray *leftArray = [orderArray subarrayWithRange:NSMakeRange(i, [array count]-i)];
         int relativeMostIndex = getMostIndex(leftArray);
         int absoluteMostIndex = relativeMostIndex + i;
         
-        [correctOrderArray exchangeObjectAtIndex:i withObjectAtIndex:absoluteMostIndex];
+        [orderArray exchangeObjectAtIndex:i withObjectAtIndex:absoluteMostIndex];
     }
     
-    return correctOrderArray;
+    return orderArray;
 }
 
 + (NSArray *)heapWithNumberArray:(NSArray *)array order:(SORT_ORDER)order
 {
-    NSMutableArray *correctOrderArray = [NSMutableArray arrayWithArray:array];
+    NSMutableArray *orderArray = [NSMutableArray arrayWithArray:array];
     
     void (^adjustHeap)(int,long) = ^(int index, long count){
         int child = 2*index+1;
@@ -140,12 +140,12 @@
             switch (order) {
                 case SORT_ORDER_ASCEND:
                 {
-                    if(child+1 < count && correctOrderArray[child+1] >correctOrderArray[child]) {
+                    if(child+1 < count && orderArray[child+1] >orderArray[child]) {
                         ++child;
                     }
-                    if(correctOrderArray[child] > correctOrderArray[index]) {
+                    if(orderArray[child] > orderArray[index]) {
                         
-                        [correctOrderArray exchangeObjectAtIndex:index withObjectAtIndex:child];
+                        [orderArray exchangeObjectAtIndex:index withObjectAtIndex:child];
                         
                         index = child;
                         child = 2*index+1;
@@ -156,12 +156,12 @@
                     break;
                 case SORT_ORDER_DESCEND:
                 {
-                    if(child+1 < count && correctOrderArray[child+1] < correctOrderArray[child]) {
+                    if(child+1 < count && orderArray[child+1] < orderArray[child]) {
                         ++child;
                     }
-                    if(correctOrderArray[child] < correctOrderArray[index]) {
+                    if(orderArray[child] < orderArray[index]) {
                         
-                        [correctOrderArray exchangeObjectAtIndex:index withObjectAtIndex:child];
+                        [orderArray exchangeObjectAtIndex:index withObjectAtIndex:child];
                         
                         index = child;
                         child = 2*index+1;
@@ -179,24 +179,56 @@
     
     void (^creatHeap)() = ^(){
         //最后一个有子节点的根节点
-        for (int i = (int)([correctOrderArray count] -1)/2 ; i >= 0; --i)
+        for (int i = (int)([orderArray count] -1)/2 ; i >= 0; --i)
         {
-            adjustHeap(i,[correctOrderArray count]);
+            adjustHeap(i,[orderArray count]);
         }
     };
     
     creatHeap();
     
     //从最后一个元素开始对序列进行调整
-    for (long i = [correctOrderArray count] - 1; i > 0; --i)
+    for (long i = [orderArray count] - 1; i > 0; --i)
     {
         //交换堆顶元素H[0]和堆中最后一个元素
-        [correctOrderArray exchangeObjectAtIndex:0 withObjectAtIndex:i];
+        [orderArray exchangeObjectAtIndex:0 withObjectAtIndex:i];
         //每次交换堆顶元素和堆中最后一个元素之后，都要对堆进行调整
         adjustHeap(0,i);
     }
     
-    return correctOrderArray;
+    return orderArray;
+}
+
++ (NSArray *)bubbleWithNumberArray:(NSArray *)array order:(SORT_ORDER)order
+{
+    NSMutableArray *orderArray = [NSMutableArray arrayWithArray:array];
+    
+    for (NSInteger i=0; i<[orderArray count]; i++) {
+        BOOL isChanged = NO;
+        
+        for (NSInteger j=[orderArray count]-1; j>i; j--) {
+            NSNumber *upNumber = [orderArray objectAtIndex:j-1];
+            NSNumber *downNumber = [orderArray objectAtIndex:j];
+            
+            if (order == SORT_ORDER_ASCEND) {
+                if (upNumber.intValue > downNumber.intValue) {
+                    [orderArray exchangeObjectAtIndex:j withObjectAtIndex:j-1];
+                    isChanged = YES;
+                }
+            }else {
+                if (upNumber.intValue < downNumber.intValue) {
+                    [orderArray exchangeObjectAtIndex:j withObjectAtIndex:j-1];
+                    isChanged = YES;
+                }
+            }
+        }
+        
+        if (!isChanged) {
+            break;
+        }
+    }
+    
+    return orderArray;
 }
 
 @end

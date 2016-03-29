@@ -5,7 +5,7 @@
 //  Created by jixuhui on 16/3/28.
 //  Copyright © 2016年 hubbert. All rights reserved.
 //  Reference http://blog.csdn.net/hguisu/article/details/7776068
-//  Time and Space Complication http://blog.chinaunix.net/uid-21457204-id-3060260.html
+//  Time and Space Complexity http://blog.chinaunix.net/uid-21457204-id-3060260.html
 
 #import <Foundation/Foundation.h>
 
@@ -21,7 +21,10 @@ typedef enum _SORT_ORDER
 
 /**
  *  插入排序
- *  @desc 空间复杂度：O(1) 时间复杂度：O(n*n) 最差：O(n*n) 稳定性：稳定 备注：大部分已排序时较好
+ *  @space  O(1)
+ *  @time   O(n*n) best O(n) worst O(n*n)
+ *  @stability  稳定
+ *  @desc   大部分已排序时较好
  *
  *  @param array 输入的NSNumber对象数组
  *  @param order 升序、降序
@@ -32,7 +35,7 @@ typedef enum _SORT_ORDER
 
 /**
  *  二分插入排序
- *  @desc 空间复杂度：时间复杂度：
+ *  @desc
  *
  *  @param array 输入的NSNumber对象数组
  *  @param order 升序、降序
@@ -43,7 +46,10 @@ typedef enum _SORT_ORDER
 
 /**
  *  希尔排序
- *  @desc 空间复杂度：O(1) 时间复杂度：O(nlogn) 最差：O(ns) 1<s<2 稳定性：不稳定 备注：s是所选分组
+ *  @space  O(1)
+ *  @time   O(nlogn) best O(n) worst O(ns) 1<s<2
+ *  @stability  不稳定
+ *  @desc   s是所选分组
  *
  *  @param array      输入的NSNumber对象数组
  *  @param countArray 增量数组，递减，首小于原始数组大小，末等于1
@@ -55,7 +61,10 @@ typedef enum _SORT_ORDER
 
 /**
  *  简单选择排序
- *  @desc 空间复杂度：O(1) 时间复杂度：O(n*n) 最差：O(n*n) 稳定性：不稳定 备注：n小时较好
+ *  @space  O(1)
+ *  @time   O(n*n) best O(n*n) worst O(n*n)
+ *  @stability  不稳定
+ *  @desc   n小时较好
  *
  *  @param array 输入的NSNumber对象数组
  *  @param order 升序、降序
@@ -68,7 +77,10 @@ typedef enum _SORT_ORDER
 
 /**
  *  堆排序
- *  @desc 空间复杂度：O(1) 时间复杂度：O(n*n) 最差：O(n*n) 稳定性：不稳定 备注：n小时较好
+ *  @space O(1)
+ *  @time O(nlog2n) best O(nlog2n) worst O(nlog2n)
+ *  @stability 不稳定
+ *  @desc n小时较好
  *
  *  @param array 输入的NSNumber对象数组
  *  @param order 升序、降序
@@ -76,5 +88,19 @@ typedef enum _SORT_ORDER
  *  @return 排序后数组
  */
 + (NSArray * __nonnull)heapWithNumberArray:(NSArray * __nonnull)array order:(SORT_ORDER)order;
+
+/**
+ *  冒泡排序【有改进，加了标志位】
+ *  @space O(1)
+ *  @time O(n*n) best O(n) worst O(n*n)
+ *  @stability 稳定
+ *  @desc n小时较好
+ *
+ *  @param array 输入的NSNumber对象数组
+ *  @param order 升序、降序
+ *
+ *  @return 排序后数组
+ */
++ (NSArray * __nonnull)bubbleWithNumberArray:(NSArray * __nonnull)array order:(SORT_ORDER)order;
 
 @end
