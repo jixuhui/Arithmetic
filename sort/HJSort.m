@@ -59,14 +59,20 @@
         return i;
     };
     
+    //移除oneNumber先，数组减一，如果找到的位置是大于目前数组，就add到最后，否则，直接插入location即可
+    int i = 0;
     for (NSNumber *oneNumber in array) {
         int location = getLocation(oneNumber);
+        
+        [orderArray removeObjectAtIndex:i];
         
         if (location==[orderArray count]) {
             [orderArray addObject:oneNumber];
         }else {
             [orderArray insertObject:oneNumber atIndex:location];
         }
+        
+        i ++;
     }
     
     return orderArray;
@@ -283,21 +289,34 @@
         return outValue;
     };
     
-    
-    static void (^ recursiveMethod)(int, int) = NULL;
-    
-    recursiveMethod = ^(int low, int high) {
-        if (low < high) {
+    //优化后的，设定最小区间，保持足够的排序，再使用插入排序
+    static void (^ improveRecursiveMethod)(int, int, int) = NULL;
+    improveRecursiveMethod = ^(int low, int high, int gap) {
+        if (high - low > gap) {
             int middle = group(low,high);
             
-            recursiveMethod(low,middle-1);
-            recursiveMethod(middle+1,high);
+            //block递归，声明注意staic 和 = NULL
+            improveRecursiveMethod(low,middle-1,gap);
+            improveRecursiveMethod(middle+1,high,gap);
         }
     };
     
-    recursiveMethod(0,(int)orderArray.count-1);
+    //原始算法
+//    static void (^ recursiveMethod)(int, int) = NULL;
+//    recursiveMethod = ^(int low, int high) {
+//        if (low < high) {
+//            int middle = group(low,high);
+//            
+//            recursiveMethod(low,middle-1);
+//            recursiveMethod(middle+1,high);
+//        }
+//    };
+//    
+//    recursiveMethod(0,(int)orderArray.count-1);
     
-    return orderArray;
+    //理论上，gap值为8左右，时间复杂度达到最好，但是鉴于使用的测试无序数组比较少，设置为4
+    improveRecursiveMethod(0,(int)orderArray.count-1,4);
+    return [HJSort insertionWithNumberArray:orderArray order:order];
 }
 
 @end

@@ -105,8 +105,8 @@ typedef enum _SORT_ORDER
 
 /**
  *  快速排序【有改进，加了标志位】
- *  @space O(1)
- *  @time O(n*n) best O(n) worst O(n*n)
+ *  @space O(nlog2n)
+ *  @time O(nlog2n) best O(nlog2n) worst O(n*n)
  *  @stability 稳定
  *  @desc n小时较好
  *
@@ -114,6 +114,10 @@ typedef enum _SORT_ORDER
  *  @param order 升序、降序
  *
  *  @return 排序后数组
+ *  @other 可参考本段代码如何ARC下的block 递归
  */
 + (NSArray * __nonnull)quickWithNumberArray:(NSArray * __nonnull)array order:(SORT_ORDER)order;
+
+
+
 @end
