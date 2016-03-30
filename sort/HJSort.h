@@ -6,6 +6,7 @@
 //  Copyright © 2016年 hubbert. All rights reserved.
 //  Reference http://blog.csdn.net/hguisu/article/details/7776068
 //  Time and Space Complexity http://blog.chinaunix.net/uid-21457204-id-3060260.html
+//  Merge Sort http://www.cnblogs.com/jingmoxukong/p/4308823.html
 
 #import <Foundation/Foundation.h>
 
@@ -104,7 +105,7 @@ typedef enum _SORT_ORDER
 + (NSArray * __nonnull)bubbleWithNumberArray:(NSArray * __nonnull)array order:(SORT_ORDER)order;
 
 /**
- *  快速排序【有改进，加了标志位】
+ *  快速排序
  *  @space O(nlog2n)
  *  @time O(nlog2n) best O(nlog2n) worst O(n*n)
  *  @stability 稳定
@@ -118,6 +119,19 @@ typedef enum _SORT_ORDER
  */
 + (NSArray * __nonnull)quickWithNumberArray:(NSArray * __nonnull)array order:(SORT_ORDER)order;
 
-
+/**
+ *  归并排序
+ *  @space O(n)
+ *  @time O(nlog2n) best O(nlog2n) worst O(nlog2n)
+ *  @stability 稳定
+ *  @desc n小时较好
+ *
+ *  @param array 输入的NSNumber对象数组
+ *  @param order 升序、降序
+ *
+ *  @return 排序后数组
+ *  @other 可参考本段代码如何ARC下的block 递归
+ */
++ (NSArray * __nonnull)mergeWithNumberArray:(NSArray * __nonnull)array order:(SORT_ORDER)order;
 
 @end
